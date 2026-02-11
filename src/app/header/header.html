@@ -1,0 +1,25 @@
+<header class="header">
+  <div class="logo-area">
+    <img src="img/logo.png" alt="Logo" class="logo" />
+    <h1 class="title">DeckMaster AI</h1>
+  </div>
+
+  <nav class="nav">
+    <a routerLink="/decks">Decks</a>
+    <a routerLink="/create">Criar Deck</a>
+    <a routerLink="/ai-tips">Dicas com IA</a>
+  </nav>
+
+  <div class="search-area">
+    <input
+      type="text"
+      placeholder="Buscar carta..."
+      (search)="search"
+    />
+    <button (click)="onSearch()">Buscar</button>
+  </div>
+
+  <div class="auth">
+    <button class="login-btn">Login</button>
+  </div>
+</header>
