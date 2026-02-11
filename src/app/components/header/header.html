@@ -1,0 +1,48 @@
+<header class="bg-gray-900 text-white shadow-md">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+    <!-- Logo + Nome -->
+    <div class="flex items-center gap-3">
+      <img src="img/logo.png" alt="Logo" class="w-25 h-10 object-contain" />
+      <h1 class="text-xl font-bold text-yellow-400">DeckMaster AI</h1>
+    </div>
+
+    <!-- Navegação -->
+    <nav class="hidden md:flex gap-6 text-sm font-medium">
+      <a routerLink="/decks" class="hover:text-yellow-400 transition">
+        Decks
+      </a>
+      <a routerLink="/create" class="hover:text-yellow-400 transition">
+        Criar Deck
+      </a>
+      <a routerLink="/ai-tips" class="hover:text-yellow-400 transition">
+        Dicas com IA
+      </a>
+    </nav>
+
+    <!-- Busca -->
+    <div class="hidden md:flex items-center gap-2">
+      <input
+        type="text"
+        placeholder="Buscar carta..."
+        class="px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm"
+      />
+      <button
+        (click)="onSearch()"
+        class="bg-yellow-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition"
+      >
+        Buscar
+      </button>
+    </div>
+
+    <!-- Login -->
+    <div>
+      <button
+        class="bg-indigo-600 px-4 py-2 rounded-lg font-semibold hover:bg-indigo-500 transition"
+      >
+        Login
+      </button>
+    </div>
+
+  </div>
+</header>
