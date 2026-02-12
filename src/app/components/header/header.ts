@@ -1,8 +1,10 @@
 import { Component, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [FormsModule, RouterModule],
   templateUrl: './header.html'
 })
 export class Header {

@@ -1,0 +1,111 @@
+<section class="min-h-screen bg-gray-950 text-white px-6 py-10">
+
+  <!-- Header -->
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between md:items-center gap-6 mb-8">
+    
+    <div>
+      <h2 class="text-3xl font-bold text-yellow-400">Meus Decks</h2>
+      <p class="text-gray-400 text-sm">
+        Gerencie e edite seus decks personalizados.
+      </p>
+    </div>
+
+    <button
+      routerLink="/create"
+      class="bg-yellow-400 text-gray-900 px-5 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition"
+    >
+      + Novo Deck
+    </button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-4 mb-8">
+
+    <!-- Pesquisa -->
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Pesquisar deck..."
+      class="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+    />
+
+    <!-- Filtro tamanho -->
+    <select
+      [(ngModel)]="selectedSize"
+      class="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+    >
+      <option value="all">Todos</option>
+      <option value="40">40 cartas</option>
+      <option value="41+">41+ cartas</option>
+    </select>
+
+  </div>
+
+  <!-- Grid -->
+  <div class="max-w-7xl mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+    @for (deck of paginatedDecks; track deck) {
+
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-yellow-400/10 transition">
+
+        <h3 class="text-xl font-semibold text-yellow-300 mb-2">
+          {{ deck.name }}
+        </h3>
+
+        <p class="text-gray-400 text-sm mb-4">
+          {{ deck.description }}
+        </p>
+
+        <div class="flex justify-between items-center text-sm mb-4">
+          <span class="bg-indigo-600 px-3 py-1 rounded-full text-xs">
+            {{ deck.cards }} cartas
+          </span>
+
+          <span class="text-gray-500 text-xs">
+            {{ deck.updatedAt | date:'shortDate' }}
+          </span>
+        </div>
+
+        <div class="flex gap-3">
+          <button class="flex-1 bg-indigo-600 py-2 rounded-lg hover:bg-indigo-500 transition text-sm">
+            Editar
+          </button>
+
+          <button class="flex-1 bg-red-600 py-2 rounded-lg hover:bg-red-500 transition text-sm">
+            Excluir
+          </button>
+        </div>
+
+      </div>
+
+    }
+
+  </div>
+
+  <!-- Paginação -->
+  <div class="flex justify-center mt-10 gap-2">
+
+    @for (page of [].constructor(totalPages); track $index) {
+
+      <button
+        (click)="changePage($index + 1)"
+        class="px-4 py-2 rounded-lg text-sm transition"
+        [class.bg-yellow-400]="currentPage === $index + 1"
+        [class.text-gray-900]="currentPage === $index + 1"
+        [class.bg-gray-800]="currentPage !== $index + 1"
+      >
+        {{ $index + 1 }}
+      </button>
+
+    }
+
+  </div>
+
+  <!-- Vazio -->
+  @if (filteredDecks.length === 0) {
+    <div class="text-center text-gray-500 mt-20">
+      Nenhum deck encontrado.
+    </div>
+  }
+
+</section>
