@@ -18,7 +18,8 @@ export class Profile implements OnInit {
   constructor(
     private fb: FormBuilder,
     private profileService: ProfileService
-  ) {}
+  ) { }
+
 
   ngOnInit(): void {
     this.profileForm = this.fb.group({
@@ -58,8 +59,17 @@ export class Profile implements OnInit {
   }
 
   changePassword() {
+    const clientId = 'deckmasterai-client';
+    const redirectUri = encodeURIComponent('http://localhost:4200/profile');
+
     window.location.href =
-      'http://localhost:8080/realms/masterdeckai-realm/account/#/security/signingin';
+      `http://localhost:8080/realms/masterdeckai-realm/protocol/openid-connect/auth` +
+      `?client_id=${clientId}` +
+      `&redirect_uri=${redirectUri}` +
+      `&response_type=code` +
+      `&scope=openid` +
+      `&kc_action=UPDATE_PASSWORD`;
   }
+
 }
 
