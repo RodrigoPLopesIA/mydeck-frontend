@@ -11,18 +11,39 @@ import { Router, RouterModule } from '@angular/router';
 export class CreateDeck {
   deck = {
     name: '',
-    description: ''
+    description: '',
+    image: null as File | null
   };
 
-  constructor(private router: Router) { }
+  imagePreview: string | ArrayBuffer | null = null;
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+
+    if (file) {
+      this.deck.image = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
   createDeck() {
-    console.log('Deck criado:', this.deck);
+    const formData = new FormData();
+    formData.append('name', this.deck.name);
+    formData.append('description', this.deck.description);
 
-    // Aqui depois você chama sua API
-    // this.deckService.create(this.deck).subscribe(...)
+    if (this.deck.image) {
+      formData.append('image', this.deck.image);
+    }
 
-    // Simulação de redirecionamento
-    this.router.navigate(['/decks']);
+    // Enviar para API
+    console.log('Deck criado:', formData);
+
+    // Exemplo:
+    // this.deckService.create(formData).subscribe(...)
   }
 }
