@@ -23,6 +23,8 @@ interface Card {
   styleUrl: './cards.css',
 })
 export class Cards implements OnInit {
+  isEditing = false;
+  cardToDelete: any = null;
 
   searchTerm: string = '';
   cards: Card[] = [];
@@ -323,34 +325,20 @@ export class Cards implements OnInit {
     this.isCreating = true;
   }
 
-  closeCreateModal() {
-    this.isCreating = false;
-    this.resetNewCard();
-  }
 
-  createCard() {
-    const newId = this.cards.length
-      ? Math.max(...this.cards.map(c => c.id)) + 1
-      : 1;
+  saveCard() {
+    this.newCard.subTypes = this.monsterSubTypesInput
+      ? this.monsterSubTypesInput.split(',').map(s => s.trim())
+      : [];
 
-    if (this.newCard.type === 'Monster') {
-      this.newCard.monsterSubTypes = this.monsterSubTypesInput
-        .split(',')
-        .map(s => s.trim())
-        .filter(s => s !== '');
+    if (this.isEditing) {
+      const index = this.cards.findIndex(c => c.id === this.newCard.id);
+      this.cards[index] = { ...this.newCard };
     } else {
-      this.newCard.attack = 0;
-      this.newCard.defense = 0;
-      this.newCard.monsterType = undefined;
-      this.newCard.monsterSubTypes = undefined;
+      this.newCard.id = Date.now();
+      this.cards.push({ ...this.newCard });
     }
 
-    this.cards.push({
-      id: newId,
-      ...this.newCard
-    });
-
-    this.applyFilters();
     this.closeCreateModal();
   }
 
@@ -365,6 +353,44 @@ export class Cards implements OnInit {
       description: '',
       monsterType: '',
       monsterSubTypes: []
+    };
+
+    this.monsterSubTypesInput = '';
+  }
+
+  editCard(card: any) {
+    this.isEditing = true;
+    this.isCreating = true;
+    this.selectedCard = null;
+
+    this.newCard = { ...card };
+    this.monsterSubTypesInput = card.subTypes?.join(', ') || '';
+  }
+
+  confirmDelete(card: any) {
+    this.selectedCard = null;
+    this.cardToDelete = card;
+  }
+
+  deleteCard() {
+    this.cards = this.cards.filter(c => c.id !== this.cardToDelete.id);
+    this.cardToDelete = null;
+  }
+
+  closeCreateModal() {
+    this.isCreating = false;
+    this.isEditing = false;
+
+    this.newCard = {
+      name: '',
+      type: 'Monster',
+      attribute: '',
+      monsterType: '',
+      subTypes: [],
+      attack: 0,
+      defense: 0,
+      imageUrl: '',
+      description: ''
     };
 
     this.monsterSubTypesInput = '';

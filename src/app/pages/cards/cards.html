@@ -13,123 +13,43 @@
                 + Criar Card
             </button>
         </div>
-        <!-- Modal Criar Card -->
-        <div *ngIf="isCreating" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-
-            <div class="bg-gray-900 p-6 rounded-xl w-full max-w-lg relative">
-
-                <button (click)="closeCreateModal()" class="absolute top-3 right-3 text-gray-400 hover:text-white">
-                    ✕
-                </button>
-
-                <h2 class="text-xl text-green-400 mb-4">
-                    Criar Novo Card
-                </h2>
-
-                <div class="space-y-4">
-
-                    <input type="text" placeholder="Nome" [(ngModel)]="newCard.name"
-                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
-
-                    <select [(ngModel)]="newCard.type"
-                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
-
-                        <option value="Monster">Monster</option>
-                        <option value="Spell">Spell</option>
-                        <option value="Trap">Trap</option>
-                    </select>
-
-                    <input type="text" placeholder="Atributo (LIGHT, DARK...)" [(ngModel)]="newCard.attribute"
-                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
-
-                    <!-- Campos de monstro -->
-                    <div *ngIf="newCard.type === 'Monster'" class="space-y-3">
-
-                        <input type="text" placeholder="Tipo de Monstro (Dragon, Warrior...)"
-                            [(ngModel)]="newCard.monsterType"
-                            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
-
-                        <input type="text" placeholder="Subtipos (Effect, Tuner...) separados por vírgula"
-                            [(ngModel)]="monsterSubTypesInput"
-                            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
-
-                        <div class="flex gap-4">
-                            <input type="number" placeholder="ATK" [(ngModel)]="newCard.attack"
-                                class="w-1/2 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
-
-                            <input type="number" placeholder="DEF" [(ngModel)]="newCard.defense"
-                                class="w-1/2 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
-                        </div>
-
-                    </div>
-
-                    <input type="text" placeholder="URL da Imagem" [(ngModel)]="newCard.imageUrl"
-                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
-
-                    <textarea placeholder="Descrição" [(ngModel)]="newCard.description"
-                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
-      </textarea>
-
-                    <button (click)="createCard()"
-                        class="w-full bg-green-600 hover:bg-green-500 py-2 rounded-lg font-semibold transition">
-                        Criar
-                    </button>
-
-                </div>
-
-            </div>
-        </div>
 
         <!-- Filtros + Busca -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 
-            <!-- Filtros -->
             <div class="flex gap-3">
-
-                <button (click)="filterByType('All')" [ngClass]="selectedType === 'All' 
-            ? 'bg-yellow-500 text-black' 
-            : 'bg-gray-800 hover:bg-yellow-500 hover:text-black'" class="px-4 py-2 rounded-lg transition">
+                <button (click)="filterByType('All')" class="px-4 py-2 rounded-lg transition"
+                    [ngClass]="selectedType === 'All' ? 'bg-yellow-500 text-black' : 'bg-gray-800 hover:bg-yellow-500 hover:text-black'">
                     Todos
                 </button>
 
-                <button (click)="filterByType('Monster')" [ngClass]="selectedType === 'Monster' 
-            ? 'bg-yellow-500 text-black' 
-            : 'bg-gray-800 hover:bg-yellow-500 hover:text-black'" class="px-4 py-2 rounded-lg transition">
+                <button (click)="filterByType('Monster')" class="px-4 py-2 rounded-lg transition"
+                    [ngClass]="selectedType === 'Monster' ? 'bg-yellow-500 text-black' : 'bg-gray-800 hover:bg-yellow-500 hover:text-black'">
                     Monstros
                 </button>
 
-                <button (click)="filterByType('Spell')" [ngClass]="selectedType === 'Spell' 
-            ? 'bg-yellow-500 text-black' 
-            : 'bg-gray-800 hover:bg-yellow-500 hover:text-black'" class="px-4 py-2 rounded-lg transition">
+                <button (click)="filterByType('Spell')" class="px-4 py-2 rounded-lg transition"
+                    [ngClass]="selectedType === 'Spell' ? 'bg-yellow-500 text-black' : 'bg-gray-800 hover:bg-yellow-500 hover:text-black'">
                     Magias
                 </button>
-
             </div>
 
-            <!-- Busca -->
             <input type="text" placeholder="Buscar card..." [(ngModel)]="searchTerm" (input)="filterByName()"
-                class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-yellow-400 w-full md:w-64" />
-
+                class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 w-full md:w-64">
         </div>
 
-        <!-- Contador -->
         <p class="text-gray-400 mb-6">
             Total: {{ filteredCards.length }} cards
         </p>
-
-        <!-- Estado vazio -->
-        <div *ngIf="filteredCards.length === 0" class="text-center text-gray-500 py-20">
-            Nenhum card encontrado.
-        </div>
 
         <!-- Grid -->
         <div *ngIf="filteredCards.length > 0"
             class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
 
             <div *ngFor="let card of paginatedCards" (click)="openDetails(card)"
-                class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-lg hover:scale-105 hover:shadow-yellow-500/30 transition duration-300 cursor-pointer">
+                class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-lg hover:scale-105 hover:shadow-yellow-500/30 transition cursor-pointer">
 
-                <img [src]="card.imageUrl" [alt]="card.name" class="w-full h-60 object-cover" />
+                <img [src]="card.imageUrl" class="w-full h-60 object-cover" />
 
                 <div class="p-3">
                     <h2 class="text-sm font-semibold text-yellow-400 truncate">
@@ -147,10 +67,10 @@
                 </div>
 
             </div>
-
         </div>
-
-        <!-- Paginação -->
+        <!-- ========================= -->
+        <!-- PAGINAÇÃO -->
+        <!-- ========================= -->
         <div *ngIf="totalPages > 1" class="flex justify-center items-center gap-4 mt-12">
 
             <button (click)="previousPage()" [disabled]="currentPage === 1"
@@ -168,10 +88,11 @@
             </button>
 
         </div>
-
     </div>
 
-    <!-- Modal -->
+    <!-- ========================= -->
+    <!-- MODAL DETALHES -->
+    <!-- ========================= -->
     <div *ngIf="selectedCard" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
 
         <div class="bg-gray-900 p-6 rounded-xl max-w-md w-full relative">
@@ -189,16 +110,124 @@
             <p class="text-gray-300 text-sm mb-4">
                 {{ selectedCard.description }}
             </p>
-            <p class="text-xs text-gray-400">
+
+            <p class="text-xs text-gray-400 mb-3">
                 {{ selectedCard.type }} • {{ selectedCard.attribute }}
             </p>
-            <div *ngIf="selectedCard.type === 'Monster'" class="flex justify-between text-sm text-gray-300">
+
+            <div *ngIf="selectedCard.type === 'Monster'" class="flex justify-between text-sm text-gray-300 mb-4">
                 <span>ATK: {{ selectedCard.attack }}</span>
                 <span>DEF: {{ selectedCard.defense }}</span>
             </div>
 
-        </div>
+            <!-- BOTÕES -->
+            <div class="flex gap-3">
+                <button (click)="editCard(selectedCard)"
+                    class="flex-1 bg-blue-600 py-2 rounded-lg hover:bg-blue-500 transition">
+                    Editar
+                </button>
 
+                <button (click)="confirmDelete(selectedCard)"
+                    class="flex-1 bg-red-600 py-2 rounded-lg hover:bg-red-500 transition">
+                    Excluir
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ========================= -->
+    <!-- MODAL CRIAR / EDITAR -->
+    <!-- ========================= -->
+    <div *ngIf="isCreating" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+        <div class="bg-gray-900 p-6 rounded-xl w-full max-w-lg relative">
+
+            <button (click)="closeCreateModal()" class="absolute top-3 right-3 text-gray-400 hover:text-white">
+                ✕
+            </button>
+
+            <h2 class="text-xl text-green-400 mb-4">
+                {{ isEditing ? 'Editar Card' : 'Criar Novo Card' }}
+            </h2>
+
+            <div class="space-y-4">
+
+                <input type="text" placeholder="Nome" [(ngModel)]="newCard.name"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+
+                <select [(ngModel)]="newCard.type"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
+                    <option value="Monster">Monster</option>
+                    <option value="Spell">Spell</option>
+                    <option value="Trap">Trap</option>
+                </select>
+
+                <input type="text" placeholder="Atributo" [(ngModel)]="newCard.attribute"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+
+                <div *ngIf="newCard.type === 'Monster'" class="space-y-3">
+
+                    <input type="text" placeholder="Tipo de Monstro" [(ngModel)]="newCard.monsterType"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+
+                    <input type="text" placeholder="Subtipos separados por vírgula" [(ngModel)]="monsterSubTypesInput"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+
+                    <div class="flex gap-4">
+                        <input type="number" placeholder="ATK" [(ngModel)]="newCard.attack"
+                            class="w-1/2 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+
+                        <input type="number" placeholder="DEF" [(ngModel)]="newCard.defense"
+                            class="w-1/2 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+                    </div>
+
+                </div>
+
+                <input type="text" placeholder="URL da Imagem" [(ngModel)]="newCard.imageUrl"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+
+                <textarea placeholder="Descrição" [(ngModel)]="newCard.description"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
+        </textarea>
+
+                <button (click)="saveCard()"
+                    class="w-full bg-green-600 hover:bg-green-500 py-2 rounded-lg font-semibold transition">
+                    {{ isEditing ? 'Salvar Alterações' : 'Criar' }}
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================= -->
+    <!-- MODAL CONFIRMAR EXCLUSÃO -->
+    <!-- ========================= -->
+    <div *ngIf="cardToDelete" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+        <div class="bg-gray-900 p-6 rounded-xl w-full max-w-sm">
+
+            <h2 class="text-lg text-red-500 mb-4">
+                Confirmar Exclusão
+            </h2>
+
+            <p class="text-gray-300 mb-6">
+                Tem certeza que deseja excluir o card
+                <strong>{{ cardToDelete.name }}</strong>?
+            </p>
+
+            <div class="flex gap-3">
+                <button (click)="deleteCard()" class="flex-1 bg-red-600 py-2 rounded-lg hover:bg-red-500 transition">
+                    Sim, excluir
+                </button>
+
+                <button (click)="cardToDelete = null"
+                    class="flex-1 bg-gray-700 py-2 rounded-lg hover:bg-gray-600 transition">
+                    Cancelar
+                </button>
+            </div>
+
+        </div>
     </div>
 
 </section>
