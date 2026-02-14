@@ -38,12 +38,21 @@
 
     @for (deck of paginatedDecks; track deck) {
 
-    <a [routerLink]="['/deck-details', deck.id]"
-      class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-yellow-400/10 transition">
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-yellow-400/10 transition">
 
-      <h3 class="text-xl font-semibold text-yellow-300 mb-2">
-        {{ deck.name }}
-      </h3>
+      <!-- Topo -->
+      <div class="flex justify-between items-start mb-3">
+
+        <h3 class="text-xl font-semibold text-yellow-300">
+          {{ deck.name }}
+        </h3>
+
+        <button (click)="goToDeckDetails(deck)"
+          class="bg-indigo-600 px-3 py-1 rounded-lg text-xs hover:bg-indigo-500 transition">
+          Ver Cartas
+        </button>
+
+      </div>
 
       <p class="text-gray-400 text-sm mb-4">
         {{ deck.description }}
@@ -60,16 +69,18 @@
       </div>
 
       <div class="flex gap-3">
-        <button class="flex-1 bg-indigo-600 py-2 rounded-lg hover:bg-indigo-500 transition text-sm">
+        <button (click)="openEditModal(deck)"
+          class="flex-1 bg-indigo-600 py-2 rounded-lg hover:bg-indigo-500 transition text-sm">
           Editar
         </button>
 
-        <button class="flex-1 bg-red-600 py-2 rounded-lg hover:bg-red-500 transition text-sm">
+        <button (click)="openDeleteModal(deck)"
+          class="flex-1 bg-red-600 py-2 rounded-lg hover:bg-red-500 transition text-sm">
           Excluir
         </button>
       </div>
 
-    </a>
+    </div>
 
     }
 
@@ -101,34 +112,59 @@
   </div>
   }
 
-  <!-- Modal Criar Deck -->
-  <div *ngIf="isCreating" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+  <div *ngIf="isCreating || isEditing" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
 
     <div class="bg-gray-900 p-6 rounded-xl w-full max-w-md relative">
 
-      <button (click)="closeCreateModal()" class="absolute top-3 right-3 text-gray-400 hover:text-white">
+      <button (click)="isCreating=false; isEditing=false" class="absolute top-3 right-3 text-gray-400 hover:text-white">
         ✕
       </button>
 
-      <h2 class="text-xl text-yellow-400 mb-4">
-        Criar Novo Deck
+      <h2 class="text-xl mb-4" [ngClass]="isCreating ? 'text-yellow-400' : 'text-indigo-400'">
+        {{ isCreating ? 'Criar Novo Deck' : 'Editar Deck' }}
       </h2>
 
       <div class="space-y-4">
 
-        <input type="text" placeholder="Nome do Deck" [(ngModel)]="newDeck.name"
-          class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+        <input type="text" [(ngModel)]="formDeck.name"
+          class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" placeholder="Nome do Deck" />
 
-        <textarea placeholder="Descrição" [(ngModel)]="newDeck.description"
-          class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
+        <textarea [(ngModel)]="formDeck.description"
+          class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" placeholder="Descrição">
       </textarea>
 
-        <input type="number" placeholder="Quantidade de cartas" [(ngModel)]="newDeck.cards"
-          class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+        <input type="number" [(ngModel)]="formDeck.cards"
+          class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" placeholder="Quantidade de cartas" />
 
-        <button (click)="createDeck()"
-          class="w-full bg-yellow-400 text-gray-900 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition">
-          Criar Deck
+        <button (click)="isCreating ? createDeck() : updateDeck()"
+          class="w-full py-2 rounded-lg font-semibold transition" [ngClass]="isCreating 
+          ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300'
+          : 'bg-indigo-600 hover:bg-indigo-500'">
+
+          {{ isCreating ? 'Criar Deck' : 'Salvar Alterações' }}
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+  <div *ngIf="isDeleteConfirmOpen" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+    <div class="bg-gray-900 p-6 rounded-xl w-full max-w-md text-center">
+
+      <h2 class="text-xl text-red-500 mb-4">
+        Deseja realmente excluir este deck?
+      </h2>
+
+      <div class="flex gap-4 mt-6">
+
+        <button (click)="confirmDelete()" class="flex-1 bg-red-600 hover:bg-red-500 py-2 rounded-lg font-semibold">
+          Sim, excluir
+        </button>
+
+        <button (click)="isDeleteConfirmOpen = false"
+          class="flex-1 bg-gray-700 hover:bg-gray-600 py-2 rounded-lg font-semibold">
+          Cancelar
         </button>
 
       </div>
