@@ -2,14 +2,131 @@
 
     <div class="max-w-7xl mx-auto">
 
-        <h1 class="text-3xl font-bold text-yellow-400 mb-8">
-            Meus Cards
-        </h1>
+        <!-- Título -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-yellow-400">
+                Meus Cards
+            </h1>
+
+            <button (click)="openCreateModal()"
+                class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-lg font-semibold transition">
+                + Criar Card
+            </button>
+        </div>
+        <!-- Modal Criar Card -->
+        <div *ngIf="isCreating" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+            <div class="bg-gray-900 p-6 rounded-xl w-full max-w-lg relative">
+
+                <button (click)="closeCreateModal()" class="absolute top-3 right-3 text-gray-400 hover:text-white">
+                    ✕
+                </button>
+
+                <h2 class="text-xl text-green-400 mb-4">
+                    Criar Novo Card
+                </h2>
+
+                <div class="space-y-4">
+
+                    <input type="text" placeholder="Nome" [(ngModel)]="newCard.name"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+
+                    <select [(ngModel)]="newCard.type"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
+
+                        <option value="Monster">Monster</option>
+                        <option value="Spell">Spell</option>
+                        <option value="Trap">Trap</option>
+                    </select>
+
+                    <input type="text" placeholder="Atributo (LIGHT, DARK...)" [(ngModel)]="newCard.attribute"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+
+                    <!-- Campos de monstro -->
+                    <div *ngIf="newCard.type === 'Monster'" class="space-y-3">
+
+                        <input type="text" placeholder="Tipo de Monstro (Dragon, Warrior...)"
+                            [(ngModel)]="newCard.monsterType"
+                            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+
+                        <input type="text" placeholder="Subtipos (Effect, Tuner...) separados por vírgula"
+                            [(ngModel)]="monsterSubTypesInput"
+                            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+
+                        <div class="flex gap-4">
+                            <input type="number" placeholder="ATK" [(ngModel)]="newCard.attack"
+                                class="w-1/2 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+
+                            <input type="number" placeholder="DEF" [(ngModel)]="newCard.defense"
+                                class="w-1/2 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+                        </div>
+
+                    </div>
+
+                    <input type="text" placeholder="URL da Imagem" [(ngModel)]="newCard.imageUrl"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" />
+
+                    <textarea placeholder="Descrição" [(ngModel)]="newCard.description"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
+      </textarea>
+
+                    <button (click)="createCard()"
+                        class="w-full bg-green-600 hover:bg-green-500 py-2 rounded-lg font-semibold transition">
+                        Criar
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Filtros + Busca -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+
+            <!-- Filtros -->
+            <div class="flex gap-3">
+
+                <button (click)="filterByType('All')" [ngClass]="selectedType === 'All' 
+            ? 'bg-yellow-500 text-black' 
+            : 'bg-gray-800 hover:bg-yellow-500 hover:text-black'" class="px-4 py-2 rounded-lg transition">
+                    Todos
+                </button>
+
+                <button (click)="filterByType('Monster')" [ngClass]="selectedType === 'Monster' 
+            ? 'bg-yellow-500 text-black' 
+            : 'bg-gray-800 hover:bg-yellow-500 hover:text-black'" class="px-4 py-2 rounded-lg transition">
+                    Monstros
+                </button>
+
+                <button (click)="filterByType('Spell')" [ngClass]="selectedType === 'Spell' 
+            ? 'bg-yellow-500 text-black' 
+            : 'bg-gray-800 hover:bg-yellow-500 hover:text-black'" class="px-4 py-2 rounded-lg transition">
+                    Magias
+                </button>
+
+            </div>
+
+            <!-- Busca -->
+            <input type="text" placeholder="Buscar card..." [(ngModel)]="searchTerm" (input)="filterByName()"
+                class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-yellow-400 w-full md:w-64" />
+
+        </div>
+
+        <!-- Contador -->
+        <p class="text-gray-400 mb-6">
+            Total: {{ filteredCards.length }} cards
+        </p>
+
+        <!-- Estado vazio -->
+        <div *ngIf="filteredCards.length === 0" class="text-center text-gray-500 py-20">
+            Nenhum card encontrado.
+        </div>
 
         <!-- Grid -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+        <div *ngIf="filteredCards.length > 0"
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
 
-            <div *ngFor="let card of cards"
+            <div *ngFor="let card of paginatedCards" (click)="openDetails(card)"
                 class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-lg hover:scale-105 hover:shadow-yellow-500/30 transition duration-300 cursor-pointer">
 
                 <img [src]="card.imageUrl" [alt]="card.name" class="w-full h-60 object-cover" />
@@ -29,6 +146,55 @@
                     </div>
                 </div>
 
+            </div>
+
+        </div>
+
+        <!-- Paginação -->
+        <div *ngIf="totalPages > 1" class="flex justify-center items-center gap-4 mt-12">
+
+            <button (click)="previousPage()" [disabled]="currentPage === 1"
+                class="px-4 py-2 bg-gray-800 rounded-lg hover:bg-yellow-500 hover:text-black disabled:opacity-40 transition">
+                Anterior
+            </button>
+
+            <span class="text-gray-400">
+                Página {{ currentPage }} de {{ totalPages }}
+            </span>
+
+            <button (click)="nextPage()" [disabled]="currentPage === totalPages"
+                class="px-4 py-2 bg-gray-800 rounded-lg hover:bg-yellow-500 hover:text-black disabled:opacity-40 transition">
+                Próxima
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div *ngIf="selectedCard" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+        <div class="bg-gray-900 p-6 rounded-xl max-w-md w-full relative">
+
+            <button (click)="closeDetails()" class="absolute top-3 right-3 text-gray-400 hover:text-white">
+                ✕
+            </button>
+
+            <h2 class="text-xl text-yellow-400 mb-4">
+                {{ selectedCard.name }}
+            </h2>
+
+            <img [src]="selectedCard.imageUrl" class="rounded-lg mb-4" />
+
+            <p class="text-gray-300 text-sm mb-4">
+                {{ selectedCard.description }}
+            </p>
+            <p class="text-xs text-gray-400">
+                {{ selectedCard.type }} • {{ selectedCard.attribute }}
+            </p>
+            <div *ngIf="selectedCard.type === 'Monster'" class="flex justify-between text-sm text-gray-300">
+                <span>ATK: {{ selectedCard.attack }}</span>
+                <span>DEF: {{ selectedCard.defense }}</span>
             </div>
 
         </div>
