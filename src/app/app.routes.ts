@@ -1,18 +1,14 @@
 import { Routes } from '@angular/router';
-import { Home } from './components/home/home';
-import { Mydecks } from './components/mydecks/mydecks';
-import { Deckdetails } from './components/deckdetails/deckdetails';
-import { Cards } from './components/cards/cards';
+import { Home } from './pages/home/home';
+import { Mydecks } from './pages/mydecks/mydecks';
+import { Deckdetails } from './pages/deckdetails/deckdetails';
+import { Cards } from './pages/cards/cards';
 
 export const routes: Routes =
      [
           { path: '', component: Home },
           { path: 'my-decks', component: Mydecks },
           { path: "deck-details/:id", component: Deckdetails },
-          {
-               path: 'create-deck',
-               loadComponent: () => import('./components/create-deck/create-deck').then(m => m.CreateDeck)
-          },
           {
                path: 'my-cards',
                component: Cards
