@@ -1,0 +1,103 @@
+<!-- HERO -->
+<section class="bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white min-h-screen py-24">
+  <div class="max-w-4xl mx-auto px-6">
+
+    <!-- Title -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl font-bold mb-4">
+        Meu
+        <span class="text-yellow-400">Perfil</span>
+      </h1>
+      <p class="text-gray-400">
+        Gerencie suas informações e configurações da conta.
+      </p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-slate-900 rounded-2xl shadow-xl p-10">
+
+      <!-- Avatar -->
+      <div class="flex flex-col items-center mb-10">
+
+        <div class="relative group">
+          <img
+            [src]="selectedImage || 'assets/default-avatar.png'"
+            class="w-32 h-32 rounded-full object-cover border-4 border-yellow-400 shadow-lg"
+          />
+
+          <label
+            class="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer text-sm">
+            Alterar
+            <input type="file" class="hidden" (change)="onFileSelected($event)" />
+          </label>
+        </div>
+
+        <p class="text-gray-400 text-sm mt-4">
+          Clique na imagem para alterar sua foto
+        </p>
+
+      </div>
+
+      <!-- Form -->
+      <form [formGroup]="profileForm" (ngSubmit)="save()" class="space-y-6">
+
+        <!-- Username -->
+        <div>
+          <label class="block text-sm text-gray-400 mb-2">Usuário</label>
+          <input
+            formControlName="username"
+            class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-gray-400"
+          />
+        </div>
+
+        <!-- First Name -->
+        <div>
+          <label class="block text-sm text-gray-400 mb-2">Nome</label>
+          <input
+            formControlName="firstName"
+            class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition"
+          />
+        </div>
+
+        <!-- Last Name -->
+        <div>
+          <label class="block text-sm text-gray-400 mb-2">Sobrenome</label>
+          <input
+            formControlName="lastName"
+            class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition"
+          />
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="block text-sm text-gray-400 mb-2">Email</label>
+          <input
+            formControlName="email"
+            class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition"
+          />
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col md:flex-row gap-6 pt-6">
+
+          <button
+            type="submit"
+            class="bg-yellow-400 text-black font-semibold px-6 py-3 rounded-xl hover:scale-105 transition flex-1">
+            Salvar Alterações
+          </button>
+
+          <button
+            type="button"
+            (click)="changePassword()"
+            class="border border-yellow-400 text-yellow-400 px-6 py-3 rounded-xl hover:bg-yellow-400 hover:text-black transition flex-1">
+            Alterar Senha
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+</section>
