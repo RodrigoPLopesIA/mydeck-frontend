@@ -11,30 +11,70 @@
           <span class="text-yellow-400 font-bold text-xl">DeckMaster AI</span>
         </a>
 
-        <!-- Desktop menu -->
-        <div class="hidden lg:flex gap-x-8">
-          <a routerLink="/my-decks" class="text-sm font-semibold text-white hover:text-yellow-400 transition">
-            Decks
-          </a>
-
-          <a routerLink="/my-cards" class="text-sm font-semibold text-white hover:text-yellow-400 transition">
-            Cards
-          </a>
-        </div>
-
       </div>
 
       <!-- Lado Direito -->
       <div class="flex items-center gap-4">
 
         <!-- Login (Desktop) -->
-        <div class="hidden lg:flex gap-5">
-          <button class="border border-yellow-400  bg-yellow-400 font-medium text-black  px-6 py-3 rounded-xl hover:bg-transparent hover:border-yellow-400 hover:text-yellow-400 cursor-pointer transition">
-            Login
-          </button>
-          <button class="border border-yellow-400  text-yellow-400  px-6 py-3 rounded-xl hover:bg-yellow-400 hover:border-yellow-400 hover:text-black cursor-pointer transition">
-            Register
-          </button>
+        <div class="hidden lg:flex gap-5 items-center">
+
+          <!-- Se NÃO autenticado -->
+          <ng-container *ngIf="!auth.isAuthenticated(); else loggedMenu">
+
+            <button (click)="auth.login()"
+              class="border border-yellow-400 bg-yellow-400 font-medium text-black px-6 py-3 rounded-xl hover:bg-transparent hover:text-yellow-400 transition">
+              Login
+            </button>
+
+            <button (click)="auth.login()"
+              class="border border-yellow-400 text-yellow-400 px-6 py-3 rounded-xl hover:bg-yellow-400 hover:text-black transition">
+              Register
+            </button>
+
+          </ng-container>
+
+          <!-- Se AUTENTICADO -->
+          <ng-template #loggedMenu>
+            <div class="relative">
+
+              <!-- Botão com Foto -->
+              <button (click)="toggleDropdown()" class="flex items-center gap-3 focus:outline-none">
+
+                <img src="https://ui-avatars.com/api/?name={{ auth.getUsername() }}"
+                  class="w-10 h-10 rounded-full border-2 border-yellow-400">
+
+                <span class="text-yellow-400 font-semibold">
+                  {{ auth.getUsername() }}
+                </span>
+              </button>
+
+              <!-- Dropdown -->
+              <div *ngIf="dropdownOpen()"
+                class="absolute right-0 mt-3 w-48 bg-gray-800 rounded-xl shadow-lg border border-gray-700 overflow-hidden">
+
+                <a routerLink="/profile" class="block px-4 py-3 text-white hover:bg-gray-700 transition">
+                  👤 Ver Perfil
+                </a>
+
+                <a routerLink="/my-cards" class="block px-4 py-3 text-white hover:bg-gray-700 transition">
+                  🃏 Ver Cards
+                </a>
+
+                <a routerLink="/my-decks" class="block px-4 py-3 text-white hover:bg-gray-700 transition">
+                  📚 Ver Decks
+                </a>
+
+                <button (click)="auth.logout()"
+                  class="w-full text-left px-4 py-3 text-red-400 hover:bg-gray-700 transition">
+                  🚪 Logout
+                </button>
+
+              </div>
+
+            </div>
+          </ng-template>
+
         </div>
 
         <!-- Mobile menu button -->
@@ -70,25 +110,45 @@
 
       <div class="mt-6 flow-root">
         <div class="-my-6 divide-y divide-gray-700">
+          @if (auth.isAuthenticated()) {
+
 
           <div class="space-y-2 py-6">
+            <a routerLink="/profile" (click)="mobileMenuOpen = false"
+              class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-gray-800">
+              👤 Ver Perfil
+            </a>
             <a routerLink="/my-decks" (click)="mobileMenuOpen = false"
               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-gray-800">
-              Decks
+              📚 Ver Decks
             </a>
 
             <a routerLink="/my-cards" (click)="mobileMenuOpen = false"
               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-gray-800">
-              Cards
+              🃏 Ver Cards
             </a>
-          </div>
 
+          </div>
           <div class="py-6">
-            <button
+
+            <button (click)="auth.logout()"
+              class="w-full text-center border-2 rounded-sm px-4 py-3  border-red-400 text-red-400 hover:bg-red-400 hover:text-white transition">
+              Logout
+            </button>
+          </div>
+          }@else {
+
+          <div class="py-6 flex flex-col gap-4">
+            <button (click)="login()"
               class="w-full border border-yellow-400 bg-amber-400 text-white px-6 py-3 rounded-xl">
               Login
             </button>
+            <button (click)="register()"
+              class="border border-yellow-400  text-yellow-400  px-6 py-3 rounded-xl hover:bg-yellow-400 hover:border-yellow-400 hover:text-black cursor-pointer transition">
+              Register
+            </button>
           </div>
+          }
 
         </div>
       </div>
