@@ -36,6 +36,10 @@ export class Header {
     });
   }
 
+  profile(){
+    keycloak.accountManagement();
+  }
+
   logout() {
     keycloak.logout({
       redirectUri: window.location.origin
