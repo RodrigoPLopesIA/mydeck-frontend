@@ -20,18 +20,30 @@
     <!-- Grid de Cartas -->
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
+      @if (deck.cards.length === 0) {
+
+      <p class="text-gray-500 col-span-full text-center">
+        Este deck não tem cartas.
+      </p>
+
+      } @else {
+
       @for (card of deck.cards; track card) {
-        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:shadow-yellow-400/10 transition">
 
-          <h3 class="text-lg font-semibold text-yellow-300 mb-2">
-            {{ card.name }}
-          </h3>
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:shadow-yellow-400/10 transition">
 
-          <span class="text-xs bg-gray-800 px-3 py-1 rounded-full">
-            {{ card.type }}
-          </span>
+        <h3 class="text-lg font-semibold text-yellow-300 mb-2">
+          {{ card.name }}
+        </h3>
 
-        </div>
+        <span class="text-xs bg-gray-800 px-3 py-1 rounded-full">
+          {{ card.type }}
+        </span>
+
+      </div>
+
+      }
+
       }
 
     </div>

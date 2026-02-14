@@ -1,0 +1,65 @@
+<section class="min-h-screen bg-gray-950 text-white px-6 py-10">
+
+  <div class="max-w-3xl mx-auto bg-gray-900 border border-gray-800 rounded-2xl p-8 shadow-xl">
+
+    <h1 class="text-3xl font-bold text-yellow-400 mb-6">
+      Criar Novo Deck
+    </h1>
+
+    <form (ngSubmit)="createDeck()" #deckForm="ngForm" class="space-y-6">
+
+      <!-- Nome -->
+      <div>
+        <label class="block text-sm text-gray-400 mb-2">
+          Nome do Deck
+        </label>
+
+        <input
+          type="text"
+          name="name"
+          [(ngModel)]="deck.name"
+          required
+          class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-yellow-400"
+          placeholder="Ex: Blue Eyes Control"
+        />
+      </div>
+
+      <!-- Descrição -->
+      <div>
+        <label class="block text-sm text-gray-400 mb-2">
+          Descrição
+        </label>
+
+        <textarea
+          name="description"
+          [(ngModel)]="deck.description"
+          rows="4"
+          class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-yellow-400"
+          placeholder="Descreva a estratégia do deck..."
+        ></textarea>
+      </div>
+
+      <!-- Botões -->
+      <div class="flex justify-end gap-4 pt-4">
+
+        <button
+          type="button"
+          routerLink="/my-decks"
+          class="px-6 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          [disabled]="!deckForm.valid"
+          class="px-6 py-2 rounded-lg bg-yellow-500 text-black font-semibold hover:bg-yellow-400 transition disabled:opacity-50">
+          Criar Deck
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</section>
