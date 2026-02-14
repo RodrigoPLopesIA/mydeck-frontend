@@ -1,0 +1,38 @@
+<section class="min-h-screen bg-gray-950 text-white px-6 py-10">
+
+    <div class="max-w-7xl mx-auto">
+
+        <h1 class="text-3xl font-bold text-yellow-400 mb-8">
+            Meus Cards
+        </h1>
+
+        <!-- Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+
+            <div *ngFor="let card of cards"
+                class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-lg hover:scale-105 hover:shadow-yellow-500/30 transition duration-300 cursor-pointer">
+
+                <img [src]="card.imageUrl" [alt]="card.name" class="w-full h-60 object-cover" />
+
+                <div class="p-3">
+                    <h2 class="text-sm font-semibold text-yellow-400 truncate">
+                        {{ card.name }}
+                    </h2>
+
+                    <p class="text-xs text-gray-400">
+                        {{ card.type }} • {{ card.attribute }}
+                    </p>
+
+                    <div *ngIf="card.type === 'Monster'" class="flex justify-between text-xs mt-2 text-gray-300">
+                        <span>ATK: {{ card.attack }}</span>
+                        <span>DEF: {{ card.defense }}</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

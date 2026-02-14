@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Home } from './components/home/home';
 import { Mydecks } from './components/mydecks/mydecks';
 import { Deckdetails } from './components/deckdetails/deckdetails';
+import { Cards } from './components/cards/cards';
 
 export const routes: Routes =
      [
@@ -12,5 +13,9 @@ export const routes: Routes =
                path: 'create-deck',
                loadComponent: () => import('./components/create-deck/create-deck').then(m => m.CreateDeck)
           },
-     { path: "**", redirectTo: "" }
+          {
+               path: 'my-cards',
+               component: Cards
+          },
+          { path: "**", redirectTo: "" }
      ];
