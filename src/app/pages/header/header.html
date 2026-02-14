@@ -53,10 +53,9 @@
               <div *ngIf="dropdownOpen()"
                 class="absolute right-0 mt-3 w-48 bg-gray-800 rounded-xl shadow-lg border border-gray-700 overflow-hidden">
 
-                <button (click)="profile()"
-                  class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-gray-800">
+                <a routerLink="/profile" class="block px-4 py-3 text-white hover:bg-gray-700 transition">
                   👤 Ver Perfil
-                </button>
+                </a>
 
                 <a routerLink="/my-cards" class="block px-4 py-3 text-white hover:bg-gray-700 transition">
                   🃏 Ver Cards
@@ -115,10 +114,10 @@
 
 
           <div class="space-y-2 py-6">
-            <button (click)="profile()"
+            <a routerLink="/profile"
               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-gray-800">
               👤 Ver Perfil
-            </button>
+            </a>
             <a routerLink="/my-decks" (click)="mobileMenuOpen = false"
               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-gray-800">
               📚 Ver Decks
