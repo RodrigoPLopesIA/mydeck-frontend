@@ -4,6 +4,7 @@ import { Card as CardComponent } from "../../components/card/card";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DeckService } from '../../services/decks/deck-service';
+import { CardService } from '../../services/card-service';
 
 interface ICard {
   id: number;
@@ -235,13 +236,17 @@ export class Deckdetails {
   ];
   selectedToAdd: any = null;
 
-  constructor(private route: ActivatedRoute, private deckService: DeckService) { }
+  constructor(private route: ActivatedRoute, private deckService: DeckService, private cardService: CardService) { }
 
   ngOnInit() {
     this.deckId = this.route.snapshot.paramMap.get('id')!;
     this.deck = this.deckService.getDeckById(Number(this.deckId))!;
+    this.getUserCardsNotInDeck()
   }
 
+  getUserCardsNotInDeck(){
+    this.userCards = this.cardService.getCards();
+  }
   openDetails(card: ICard) {
     this.selectedCard = card;
     console.log("Selected Card:", this.selectedCard);
