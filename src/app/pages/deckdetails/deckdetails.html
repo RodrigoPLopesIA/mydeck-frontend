@@ -12,9 +12,15 @@
         {{ deck.description }}
       </p>
 
-      <span class="inline-block mt-4 bg-indigo-600 px-4 py-1 rounded-full text-sm">
-        {{ deck.cards.length }} cartas
-      </span>
+      <div class="flex flex-row items-center justify-between gap-4">
+        <span class="inline-block mt-4 bg-indigo-600 px-4 py-1 rounded-full text-sm">
+          {{ deck.cards.length }} cartas
+        </span>
+        <button (click)="openAddModal()"
+          class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-lg font-semibold transition cursor-pointer">
+          + Adicionar Card
+        </button>
+      </div>
     </div>
 
     <!-- Grid de Cartas -->
@@ -81,5 +87,49 @@
       </div>
 
     </div>
+
   </div>
+  <!-- MODAL ADICIONAR CARD -->
+  <div *ngIf="showAddModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+    <div class="bg-gray-900 p-6 rounded-xl max-w-5xl w-full relative">
+
+      <!-- Fechar -->
+      <button (click)="closeAddModal()" class="absolute top-3 right-3 text-gray-400 hover:text-white">
+        ✕
+      </button>
+
+      <h2 class="text-2xl text-yellow-400 mb-6">
+        Selecione uma Carta
+      </h2>
+
+      <!-- Grid de cartas -->
+      <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 max-h-[500px] overflow-y-auto">
+
+        <div *ngFor="let card of userCards" (click)="selectCard(card)"
+          class="border rounded-xl overflow-hidden cursor-pointer transition hover:scale-105" [ngClass]="{
+          'border-yellow-400 shadow-lg shadow-yellow-500/40': selectedToAdd?.id === card.id,
+          'border-gray-800': selectedToAdd?.id !== card.id
+        }">
+
+          <app-card [card]="card"></app-card>
+
+        </div>
+
+      </div>
+
+      <!-- Botão adicionar -->
+      <div class="mt-6 flex justify-end">
+
+        <button [disabled]="!selectedToAdd" (click)="addSelectedCard()"
+          class="bg-indigo-600 px-6 py-2 rounded-lg font-semibold transition hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
+          Adicionar ao Deck
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
