@@ -18,7 +18,7 @@
     </div>
 
     <!-- Grid de Cartas -->
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-6">
 
       @if (deck.cards.length === 0) {
 
@@ -28,19 +28,14 @@
 
       } @else {
 
-      @for (card of deck.cards; track card) {
-
-      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:shadow-yellow-400/10 transition">
-
-        <h3 class="text-lg font-semibold text-yellow-300 mb-2">
-          {{ card.name }}
-        </h3>
-
-        <span class="text-xs bg-gray-800 px-3 py-1 rounded-full">
-          {{ card.type }}
-        </span>
-
+      @if (deck.cards.length > 0) {
+      @for (card of deck.cards; track card.id){
+      <div
+        class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-lg hover:scale-105 hover:shadow-yellow-500/30 transition cursor-pointer"
+        (click)="openDetails(card)">
+        <app-card [card]="card" />
       </div>
+      }
 
       }
 
@@ -49,5 +44,42 @@
     </div>
 
   </div>
+  <div *ngIf="selectedCard" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
 
+    <div class="bg-gray-900 p-6 rounded-xl max-w-md w-full relative">
+
+      <button (click)="selectedCard = null" class="absolute top-3 right-3 text-gray-400 hover:text-white">
+        ✕
+      </button>
+
+      <h2 class="text-xl text-yellow-400 mb-4">
+        {{ selectedCard?.name }}
+      </h2>
+
+      <img [src]="selectedCard?.imageUrl" class="rounded-lg mb-4" />
+
+      <p class="text-gray-300 text-sm mb-4">
+        {{ selectedCard?.description }}
+      </p>
+
+      <p class="text-xs text-gray-400 mb-3">
+        {{ selectedCard?.type }} • {{ selectedCard?.attribute }}
+      </p>
+
+      <div *ngIf="selectedCard?.type === 'Monster'" class="flex justify-between text-sm text-gray-300 mb-4">
+        <span>ATK: {{ selectedCard?.attack }}</span>
+        <span>DEF: {{ selectedCard?.defense }}</span>
+      </div>
+
+      <!-- BOTÕES -->
+      <div class="flex gap-3">
+
+        <button *ngIf="selectedCard" (click)="remove(selectedCard?.id)"
+          class="flex-1 bg-red-600 py-2 rounded-lg hover:bg-red-500 transition">
+          Remover do Deck
+        </button>
+      </div>
+
+    </div>
+  </div>
 </section>
