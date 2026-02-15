@@ -1,11 +1,4 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Card as CardComponent } from "../../components/card/card";
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { DeckService } from '../../services/decks/deck-service';
-import { CardService } from '../../services/card-service';
-
+import { Injectable } from '@angular/core';
 interface ICard {
   id: number;
   name: string;
@@ -19,26 +12,11 @@ interface ICard {
   monsterSubTypes?: string[];
 }
 
-interface IDeck {
-  id: number;
-  name: string;
-  description: string;
-  cards: ICard[];
-}
-
-@Component({
-  selector: 'app-deckdetails',
-  imports: [CardComponent, CommonModule, FormsModule],
-  templateUrl: './deckdetails.html'
+@Injectable({
+  providedIn: 'root',
 })
-
-export class Deckdetails {
-  deckId!: string;
-  selectedCard: ICard | null = null;
-  cardToDelete: ICard | null = null;
-  deck!: IDeck;
-  showAddModal = false;
-  userCards: any[] = [
+export class CardService {
+  cards: ICard[] = [
     {
       id: 1,
       name: 'Blue-Eyes White Dragon',
@@ -234,51 +212,36 @@ export class Deckdetails {
       description: 'Destroy all monsters on the field.'
     }
   ];
-  selectedToAdd: any = null;
 
-  constructor(private route: ActivatedRoute, private deckService: DeckService, private cardService: CardService) { }
+  constructor() { }
 
-  ngOnInit() {
-    this.deckId = this.route.snapshot.paramMap.get('id')!;
-    this.deck = this.deckService.getDeckById(Number(this.deckId))!;
-    this.getUserCardsNotInDeck()
+  getCards(): ICard[] {
+    return [...this.cards];
   }
 
-  getUserCardsNotInDeck(){
-    this.userCards = this.cardService.getCards();
-  }
-  openDetails(card: ICard) {
-    this.selectedCard = card;
-    console.log("Selected Card:", this.selectedCard);
-  }
+  createCard(card: ICard): void {
+    const newCard = {
+      ...card,
+      id: Date.now(),
+    };
 
-  remove(cardId: number | undefined) {
-    this.deckService.removeCardFromDeck(Number(this.deckId), cardId!);
-    this.selectedCard = null;
-  }
-  
-
-  openAddModal() {
-    this.showAddModal = true;
-    this.selectedToAdd = null;
+    this.cards.push(newCard);
   }
 
-  closeAddModal() {
-    this.showAddModal = false;
+  updateCard(updatedCard: ICard): void {
+    const index = this.cards.findIndex(c => c.id === updatedCard.id);
+
+    if (index !== -1) {
+      this.cards[index] = { ...updatedCard };
+    }
   }
 
-  selectCard(card: any) {
-    this.selectedToAdd = card;
+  deleteCard(id: number): void {
+    this.cards = this.cards.filter(card => card.id !== id);
   }
 
-  addSelectedCard() {
-    if (!this.selectedToAdd) return;
-
-    this.deckService.addCardToDeck(Number(this.deckId), this.selectedToAdd);
-
-    this.closeAddModal();
+  getCardById(id: number): ICard | undefined {
+    return this.cards.find(card => card.id === id);
   }
-
-
 
 }
