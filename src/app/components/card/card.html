@@ -1,0 +1,16 @@
+<img [src]="card.imageUrl" class="w-full h-60 object-cover" />
+
+<div class="p-3">
+    <h2 class="text-sm font-semibold text-yellow-400 truncate">
+        {{ card.name }}
+    </h2>
+
+    <p class="text-xs text-gray-400">
+        {{ card.type }} • {{ card.attribute }}
+    </p>
+
+    <div *ngIf="card.type === 'Monster'" class="flex justify-between text-xs mt-2 text-gray-300">
+        <span>ATK: {{ card.attack }}</span>
+        <span>DEF: {{ card.defense }}</span>
+    </div>
+</div>

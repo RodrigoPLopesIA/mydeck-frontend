@@ -48,24 +48,7 @@
 
             <div *ngFor="let card of paginatedCards" (click)="openDetails(card)"
                 class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-lg hover:scale-105 hover:shadow-yellow-500/30 transition cursor-pointer">
-
-                <img [src]="card.imageUrl" class="w-full h-60 object-cover" />
-
-                <div class="p-3">
-                    <h2 class="text-sm font-semibold text-yellow-400 truncate">
-                        {{ card.name }}
-                    </h2>
-
-                    <p class="text-xs text-gray-400">
-                        {{ card.type }} • {{ card.attribute }}
-                    </p>
-
-                    <div *ngIf="card.type === 'Monster'" class="flex justify-between text-xs mt-2 text-gray-300">
-                        <span>ATK: {{ card.attack }}</span>
-                        <span>DEF: {{ card.defense }}</span>
-                    </div>
-                </div>
-
+                <app-card [card]="card"/>
             </div>
         </div>
         <!-- ========================= -->

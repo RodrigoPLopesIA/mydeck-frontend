@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Card as CardComponent } from '../../components/card/card';
 
 interface Card {
   id: number;
@@ -18,7 +19,7 @@ interface Card {
 @Component({
   selector: 'app-cards',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CardComponent],
   templateUrl: './cards.html',
   styleUrl: './cards.css',
 })
