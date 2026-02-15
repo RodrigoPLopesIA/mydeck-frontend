@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { DeckService } from '../../services/decks/deck-service';
 
 @Component({
   selector: 'app-decks',
@@ -10,20 +11,9 @@ import { Router } from '@angular/router';
 })
 export class Mydecks {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private deckService: DeckService) { }
 
-  decks = [
-    { id: 1, name: 'Dark Magician Control', description: 'Controle e magia negra.', cards: 40, updatedAt: new Date() },
-    { id: 2, name: 'Blue-Eyes Chaos', description: 'Ataque explosivo.', cards: 42, updatedAt: new Date() },
-    { id: 3, name: 'Cyber Dragon OTK', description: 'Finalização rápida.', cards: 40, updatedAt: new Date() },
-    { id: 4, name: 'Branded Despia', description: 'Fusão estratégica.', cards: 45, updatedAt: new Date() },
-    { id: 5, name: 'Tearlaments Meta', description: 'Deck competitivo.', cards: 40, updatedAt: new Date() },
-    { id: 6, name: 'Kashtira Lock', description: 'Controle de campo.', cards: 44, updatedAt: new Date() },
-    { id: 7, name: 'Exodia FTK', description: 'Vitória instantânea.', cards: 40, updatedAt: new Date() },
-    { id: 8, name: 'Red Dragon Archfiend', description: 'Sincronia agressiva.', cards: 41, updatedAt: new Date() },
-    { id: 9, name: 'Sky Striker', description: 'Controle tático.', cards: 40, updatedAt: new Date() },
-    { id: 10, name: 'Salamangreat', description: 'Recursos infinitos.', cards: 40, updatedAt: new Date() },
-  ];
+  decks: any[] = []; 
   filteredDecks: any[] = [];
 
   isCreating = false;
@@ -39,6 +29,19 @@ export class Mydecks {
   currentPage = 1;
   pageSize = 6;
 
+  
+
+  ngOnInit() {
+    this.getDecks()
+    this.filteredDecks = this.decks;
+  }
+
+  getDecks(){
+    this.decks = this.deckService.getDecks();
+  }
+  // ======================
+  // CREATE
+  // ======================
   getEmptyDeck() {
     return {
       id: Date.now(),
@@ -49,21 +52,14 @@ export class Mydecks {
     };
   }
 
-  ngOnInit() {
-    this.filteredDecks = this.decks;
-  }
-
-  // ======================
-  // CREATE
-  // ======================
-
   openCreateModal() {
     this.formDeck = this.getEmptyDeck();
     this.isCreating = true;
   }
 
   createDeck() {
-    this.decks.push({ ...this.formDeck });
+    this.deckService.createDeck(this.formDeck);
+    this.getDecks();
     this.filterDecks();
     this.isCreating = false;
   }
@@ -78,15 +74,8 @@ export class Mydecks {
   }
 
   updateDeck() {
-    const index = this.decks.findIndex(d => d.id === this.formDeck.id);
-
-    if (index !== -1) {
-      this.decks[index] = {
-        ...this.formDeck,
-        updatedAt: new Date()
-      };
-    }
-
+    this.deckService.updateDeck(this.formDeck);
+    this.getDecks();
     this.filterDecks();
     this.isEditing = false;
   }
@@ -101,7 +90,8 @@ export class Mydecks {
   }
 
   confirmDelete() {
-    this.decks = this.decks.filter(d => d.id !== this.deckToDelete.id);
+    this.deckService.deleteDeck(this.deckToDelete.id);
+    this.getDecks();
     this.filterDecks();
     this.isDeleteConfirmOpen = false;
   }
@@ -150,5 +140,9 @@ export class Mydecks {
 
   previousPage() {
     if (this.currentPage > 1) this.currentPage--;
+  }
+
+  getTotalCardsInDeck(deckId: number): number {
+    return this.deckService.getTotalCardsInDeck(deckId);
   }
 }
