@@ -224,8 +224,6 @@ export class DeckService {
     ]
   }];
 
-
-
   public getDecks(): IDeck[] {
     return this.decks;
   }
